@@ -1,0 +1,8 @@
+module Problems1_10 where
+
+-- find the last element of a list
+
+myLast :: [a] -> a
+myLast [] = []
+myLast (x:[]) = x
+myLast (x:xs) = myLast xs
