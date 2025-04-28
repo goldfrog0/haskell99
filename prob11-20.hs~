@@ -1,0 +1,21 @@
+--11
+--(*) Modified run-length encoding.
+
+data RLencode a = Single a | Multiple Int a
+  deriving(Show)
+
+pack :: (Eq a) => [a] -> [[a]]
+pack []     = []
+pack (x:xs) = (x:takeWhile (==x) xs): pack (dropWhile (==x) xs)
+
+
+rlEncode :: Eq a => [a] -> [(Int, a)]
+rlEncode list = map (\x -> (length x, head x) ) $ pack list 
+
+rlEncodeM :: (Eq a) => [a] -> [RLencode a]
+rlEncodeM = undefined 
+
+tupToRL :: (Int, a) -> RLencode a
+tupToRL (num, a)
+  | num == 1 = Single a
+  | otherwise = Multiple num a
