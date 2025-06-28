@@ -1,7 +1,6 @@
 -- |
 
 module Arithmetic where
-import Distribution.System (Arch(I386))
 
 -- Problem 31
 -- (**) Determine whether a given integer number is prime.
