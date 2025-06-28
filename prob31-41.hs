@@ -79,16 +79,32 @@ primesInRange start end = [x | x <- [start..end], isPrime x]
 -- for even numbers greater than 2, find the two primes,
 -- that when added, equal that number.
 
-goldbach :: Int -> (Int, Int)
+goldbach :: Int -> [(Int, Int)]
 goldbach n
-  | even n = aux (primesInRange 1 n)  n
-  | n < 0  = (0, 0)
-  | otherwise = (0, 0)
+  | even n = canBeMadeOf n (primesInRange 2 n) (primesInRange 2 n)
+  | n < 0  = []
+  | otherwise = []
+
+-- Problem 41
+-- (**) A list of even numbers and their Goldbach compositions in a given range. Solutions
+
+goldbachList :: Int -> Int -> [(Int, Int)]
+goldbachList start end
+  | start < 2  = goldbachList 3 end
+  | start > end = []
+  | otherwise   = [head $ goldbach x | x <- [start..end], even x]
+
+printSums :: (Show a, Num a) => [(a, a)] -> IO ()
+printSums ls = putStr $ aux ls
   where
-    aux :: [Int] -> Int -> (Int, Int)
-    aux (a:b:xs) target
-      | a + b == target = (a , b)
-      | otherwise       = aux (a:xs) target
+    aux [] = ""
+    aux ((a, b):xs) =  show a ++ " + " ++ show b ++ " = " ++ show (a + b) ++ "\n" ++ aux xs
+
+printGoldbachList :: Int -> Int -> IO ()
+printGoldbachList start end = printSums $ goldbachList start end
+
+canBeMadeOf :: Int -> [Int] -> [Int] -> [(Int, Int)]
+canBeMadeOf target l1 l2 = [(x, y) | x <- l1, y <- l2, x + y == target, x <= y]
 
 data ReducedSqrt = Irrational Int Int | Perfect Int
 
@@ -126,7 +142,8 @@ rSqrtMult (Perfect a) (Irrational outer inner) = Irrational (a*outer) inner
 rSqrtMult (Irrational outer inner) (Perfect b) = Irrational (b*outer) inner
 rSqrtMult (Irrational a b) (Irrational x y)    = intToReducedSqrt (a*a*x*x*b*y)
 
-isPerfectSquare n = case (intToReducedSqrt n) of
+isPerfectSquare :: Int -> Bool
+isPerfectSquare n = case intToReducedSqrt n of
                       (Perfect n) -> True
                       _           -> False
 
