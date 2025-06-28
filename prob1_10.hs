@@ -38,7 +38,7 @@ myLength list = aux list 0
 --reverse 
 myReverse :: [a] -> [a]
 myReverse [] = []
-myReverse (x:[]) = [x]
+myReverse [x] = [x]
 myReverse (x:xs) = myReverse xs ++ [x]
 
 
